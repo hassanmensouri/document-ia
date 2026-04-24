@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+scikit-learn==1.6.1
+python-docx
+openpyxl
+python-pptx
+pillow
+pytesseract
+pdf2image
+PyPDF2
+transformers==4.40.2
+sentence-transformers==2.6.1
+python-multipart
+sentencepiece
+torch
+protobuf
