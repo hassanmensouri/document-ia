@@ -8,9 +8,8 @@ pillow
 pytesseract
 pdf2image
 PyPDF2
-transformers==4.40.2
-sentence-transformers==2.6.1
 python-multipart
-sentencepiece
+requests
+sentence-transformers==2.6.1
+transformers==4.40.2
 torch
-protobuf
