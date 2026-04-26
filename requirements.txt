@@ -10,6 +10,4 @@ pdf2image
 PyPDF2
 python-multipart
 requests
-sentence-transformers==2.6.1
-transformers==4.40.2
-torch
+numpy
