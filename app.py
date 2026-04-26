@@ -14,7 +14,7 @@ with open("classifier.pkl", "rb") as f:
 
 HF_TOKEN = os.getenv("HF_TOKEN")
 
-HF_EMBEDDING_MODEL = "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
+HF_EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 HF_SUMMARY_MODEL = "csebuetnlp/mT5_multilingual_XLSum"
 
 
@@ -35,17 +35,14 @@ def get_embedding(text):
     url = f"https://api-inference.huggingface.co/models/{HF_EMBEDDING_MODEL}"
 
     data = call_hf_api(url, {
-        "inputs": text,
+        "inputs": text[:2000],
         "options": {"wait_for_model": True}
     })
 
     arr = np.array(data)
 
-    # Sometimes HF returns shape: tokens x dimensions
     if arr.ndim == 2:
         arr = arr.mean(axis=0)
-
-    # Sometimes HF returns shape: batch x tokens x dimensions
     elif arr.ndim == 3:
         arr = arr[0].mean(axis=0)
 
