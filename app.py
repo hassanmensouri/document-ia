@@ -32,7 +32,7 @@ def get_embedding(text):
     if not HF_TOKEN:
         raise Exception("HF_TOKEN is missing")
 
-    url = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{HF_EMBEDDING_MODEL}"
+    url = f"https://api-inference.huggingface.co/models/{HF_EMBEDDING_MODEL}"
 
     data = call_hf_api(url, {
         "inputs": text,
