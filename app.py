@@ -51,10 +51,16 @@ def get_embedding(text):
         arr = arr[0].mean(axis=0)
 
     return arr.reshape(1, -1)
+def clean_text(text):
+    text = text.replace("\n", " ")
+    text = " ".join(text.split())
+    return text
+
 
 def summarize_with_hf(text, chunk_size=1200):
     if not HF_TOKEN:
         return "HF_TOKEN is missing"
+    text = clean_text(text)
 
     summaries = []
 
