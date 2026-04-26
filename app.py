@@ -4,6 +4,7 @@ import os
 import pickle
 import requests
 import numpy as np
+from huggingface_hub import InferenceClient
 
 from utils import extract_text_from_file, smart_extract
 
@@ -14,7 +15,7 @@ with open("classifier.pkl", "rb") as f:
 
 HF_TOKEN = os.getenv("HF_TOKEN")
 
-HF_EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+HF_EMBEDDING_MODEL = "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
 HF_SUMMARY_MODEL = "csebuetnlp/mT5_multilingual_XLSum"
 
 
@@ -28,16 +29,19 @@ def call_hf_api(url, payload):
     return response.json()
 
 
+client = InferenceClient(
+    provider="hf-inference",
+    token=HF_TOKEN
+)
+
 def get_embedding(text):
     if not HF_TOKEN:
         raise Exception("HF_TOKEN is missing")
 
-    url = f"https://api-inference.huggingface.co/models/{HF_EMBEDDING_MODEL}"
-
-    data = call_hf_api(url, {
-        "inputs": text[:2000],
-        "options": {"wait_for_model": True}
-    })
+    data = client.feature_extraction(
+        text[:2000],
+        model=HF_EMBEDDING_MODEL
+    )
 
     arr = np.array(data)
 
@@ -47,7 +51,6 @@ def get_embedding(text):
         arr = arr[0].mean(axis=0)
 
     return arr.reshape(1, -1)
-
 
 def summarize_with_hf(text):
     if not HF_TOKEN:

@@ -11,3 +11,4 @@ PyPDF2
 python-multipart
 requests
 numpy
+huggingface_hub
