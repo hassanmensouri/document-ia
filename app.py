@@ -52,16 +52,23 @@ def get_embedding(text):
 
     return arr.reshape(1, -1)
 
-def summarize_with_hf(text):
+def summarize_with_hf(text, chunk_size=1200):
     if not HF_TOKEN:
         return "HF_TOKEN is missing"
 
-    result = client.summarization(
-        text[:5000],
-        model=HF_SUMMARY_MODEL
-    )
+    summaries = []
 
-    return result.summary_text
+    for i in range(0, min(len(text), 5000), chunk_size):
+        chunk = text[i:i + chunk_size]
+
+        result = client.summarization(
+            chunk,
+            model=HF_SUMMARY_MODEL
+        )
+
+        summaries.append(result.summary_text)
+
+    return " ".join(summaries)
 @app.get("/")
 def home():
     return {"message": "Document AI API is running"}
