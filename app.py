@@ -58,16 +58,10 @@ def summarize_with_hf(text):
 
     result = client.summarization(
         text[:5000],
-        model=HF_SUMMARY_MODEL,
-        parameters={
-            "max_length": 100,
-            "min_length": 30,
-            "do_sample": False
-        }
+        model=HF_SUMMARY_MODEL
     )
 
     return result.summary_text
-
 @app.get("/")
 def home():
     return {"message": "Document AI API is running"}
