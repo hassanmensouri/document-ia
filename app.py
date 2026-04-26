@@ -56,23 +56,17 @@ def summarize_with_hf(text):
     if not HF_TOKEN:
         return "HF_TOKEN is missing"
 
-    url = f"https://api-inference.huggingface.co/models/{HF_SUMMARY_MODEL}"
-
-    data = call_hf_api(url, {
-        "inputs": "summarize: " + text[:5000],
-        "parameters": {
+    result = client.summarization(
+        text[:5000],
+        model=HF_SUMMARY_MODEL,
+        parameters={
             "max_length": 100,
             "min_length": 30,
             "do_sample": False
-        },
-        "options": {"wait_for_model": True}
-    })
+        }
+    )
 
-    if isinstance(data, list) and len(data) > 0:
-        return data[0].get("summary_text", str(data[0]))
-
-    return str(data)
-
+    return result.summary_text
 
 @app.get("/")
 def home():
