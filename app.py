@@ -61,12 +61,18 @@ def summarize_with_hf(text):
     if not HF_TOKEN:
         return "HF_TOKEN is missing"
 
-    result = client.summarization(
-        text[:5000],
-        model=HF_SUMMARY_MODEL
+    text = clean_text(text)
+
+    # 🔥 prompt واضح بالفرنسية
+    prompt = f"Résume ce texte en français en 2 phrases claires:\n{text[:1500]}"
+
+    result = client.text_generation(
+        prompt,
+        model="google/flan-t5-base",  # 👈 خفيف وسريع
+        max_new_tokens=120
     )
 
-    return result.summary_text
+    return result.strip()
 @app.get("/")
 def home():
     return {"message": "Document AI API is running"}
