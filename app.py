@@ -63,15 +63,17 @@ def summarize_with_hf(text):
 
     text = clean_text(text)
 
-    prompt = f"Résume ce texte en français en 2 phrases claires:\n{text[:1500]}"
+    try:
+        result = client.summarization(
+            text[:1200],
+            model=HF_SUMMARY_MODEL
+        )
+        return result.summary_text
 
-    result = client.text_generation(
-        prompt,
-        model="google/flan-t5-small",
-        max_new_tokens=120
-    )
-
-    return result.strip()
+    except Exception:
+        sentences = text.split(".")
+        short_summary = ". ".join(sentences[:3]).strip()
+        return short_summary + "."
 @app.get("/")
 def home():
     return {"message": "Document AI API is running"}
