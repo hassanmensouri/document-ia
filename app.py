@@ -66,7 +66,7 @@ def summarize_with_hf(text):
     # 🔥 prompt واضح بالفرنسية
     prompt = f"Résume ce texte en français en 2 phrases claires:\n{text[:1500]}"
 
-    result = client.text_generation(
+    result = client.text2text_generation(
         prompt,
         model="google/flan-t5-base",  # 👈 خفيف وسريع
         max_new_tokens=120
